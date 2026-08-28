@@ -92,7 +92,7 @@ const SellVoucher = () => {
             "name": "Are there any listing or selling fees?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Listing is completely free. We charge a commission (30% on Google Play, 10% on other brands) deducted upon successful sale."
+              "text": "Listing is completely free. We charge a commission deducted upon successful sale."
             }
           }
         ]
@@ -337,14 +337,23 @@ const SellVoucher = () => {
                 </button>
               </div>
 
-              {form.balance > 0 && (
-                <div className="text-center -mt-2">
-                  <p className="text-sm font-medium text-gray-700">
-                    You'll receive: <span className="text-emerald-600">₹{Math.round(form.balance * (form.brand === 'Google Play' ? 0.7 : 0.9))}</span>
-                    <span className="text-gray-400 font-normal"> (after {form.brand === 'Google Play' ? 30 : 10}% commission)</span>
-                  </p>
-                </div>
-              )}
+              {form.balance > 0 && (() => {
+                const firstTimerBrands = ['Amazon', 'Flipkart'];
+                const isFirstTimer =
+                  firstTimerBrands.includes(form.brand) &&
+                  cards.filter(c => c.brand === form.brand).length === 0;
+                const commission = isFirstTimer ? 10 : 30;
+                const payout = Math.round(form.balance * (1 - commission / 100));
+                return (
+                  <div className="text-center -mt-2">
+                    <p className="text-sm font-medium text-gray-700">
+                      You'll receive:{' '}
+                      <span className="text-emerald-600 font-semibold">₹{payout}</span>
+                      <span className="text-gray-400 font-normal"> (after {commission}% commission)</span>
+                    </p>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
@@ -398,7 +407,7 @@ const SellVoucher = () => {
                 </div>
                 <div className="border-t border-gray-100 pt-4">
                   <h4 className="font-medium text-gray-800 text-sm mb-1">Are there any selling fees?</h4>
-                  <p className="text-gray-500 text-xs leading-relaxed">Commission varies by brand. We charge 30% on Google Play cards and 10% on all other brands, deducted from your payout. There are no listing fees.</p>
+                  <p className="text-gray-500 text-xs leading-relaxed">A commission is deducted from your payout upon successful sale. Listing is completely free.</p>
                 </div>
                 <div className="border-t border-gray-100 pt-4">
                   <h4 className="font-medium text-gray-800 text-sm mb-1">What if my code doesn't work?</h4>
