@@ -26,7 +26,7 @@ const Contact = () => {
           "contactPoint": [
             {
               "@type": "ContactPoint",
-              "telephone": "+91-62646-82508",
+              "telephone": "+91-67465-46864",
               "contactType": "customer support",
               "areaServed": "IN",
               "availableLanguage": ["English", "Hindi"],
@@ -119,7 +119,7 @@ const Contact = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* Left ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Contact Info */}
+          {/* Left ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â  Contact Info */}
           <div className="space-y-4">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -140,11 +140,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">Phone</p>
-                    <a href="tel:+916264682508" className="text-sm font-medium text-gray-900 hover:text-violet-700 transition-colors block">
-                      +91 62646 82508
-                    </a>
-                    <a href="tel:+919202469725" className="text-sm font-medium text-gray-900 hover:text-violet-700 transition-colors block">
-                      +91 92024 69725
+                    <a href="tel:+916746546864" className="text-sm font-medium text-gray-900 hover:text-violet-700 transition-colors block">
+                      +91 67465 46864
                     </a>
                   </div>
                 </div>

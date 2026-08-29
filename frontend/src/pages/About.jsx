@@ -23,7 +23,7 @@ const About = () => {
           "logo": "https://redeemkart.in/redeemkart-logo.png",
           "description": "RedeemKart is India's premier gift card trading platform.",
           "email": "support@redeemkart.in",
-          "telephone": "+916264682508",
+          "telephone": "+916746546864",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "New Delhi",
