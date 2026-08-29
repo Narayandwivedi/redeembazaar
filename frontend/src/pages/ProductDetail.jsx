@@ -298,7 +298,7 @@ const ProductDetail = () => {
               <button
                 onClick={handleBuyNow}
                 disabled={product.stockQuantity <= 0}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold py-4 px-8 rounded-xl hover:from-orange-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-4 px-8 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Buy Now
               </button>

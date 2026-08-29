@@ -118,7 +118,7 @@ const TopDealsSection = () => {
                 className="group relative transition-all duration-300 bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-violet-300 hover:shadow-2xl hover:shadow-violet-200/50 flex flex-col justify-between"
               >
                 {discountPercent > 0 && (
-                  <div className="absolute top-3 left-3 z-10">
+                  <div className="absolute top-1 left-1 z-10">
                     <div className="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-md">
                       -{discountPercent}% OFF
                     </div>

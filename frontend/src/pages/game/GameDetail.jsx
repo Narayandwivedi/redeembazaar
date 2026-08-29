@@ -62,7 +62,7 @@ const GameDetail = () => {
           <p className="text-gray-500 mb-4">The game you're looking for doesn't exist.</p>
           <button
             onClick={() => navigate('/')}
-            className="bg-violet-500 hover:bg-violet-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 cursor-pointer"
+            className="bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-2 px-6 rounded-lg transition-all duration-200 cursor-pointer"
           >
             Go Home
           </button>
@@ -165,7 +165,7 @@ const GameDetail = () => {
                 <div className="flex flex-row gap-3">
                   <button
                     onClick={handleBuyNow}
-                    className="flex-1 bg-violet-500 hover:bg-violet-600 text-white font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-violet-500/40 transform hover:scale-[1.02] cursor-pointer"
+                    className="flex-1 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-violet-500/40 transform hover:scale-[1.02] cursor-pointer"
                   >
                     Buy Bundle
                   </button>
@@ -254,7 +254,7 @@ const GameDetail = () => {
               <div className="flex flex-row gap-3">
                 <button
                   onClick={handleBuyNow}
-                  className="flex-1 bg-violet-500 hover:bg-violet-600 text-white font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-violet-500/40 transform hover:scale-[1.02] cursor-pointer"
+                  className="flex-1 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-3.5 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-amber-400/40 transform hover:scale-[1.02] cursor-pointer"
                 >
                   Buy Now
                 </button>

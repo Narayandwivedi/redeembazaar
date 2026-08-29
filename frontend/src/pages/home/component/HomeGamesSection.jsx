@@ -69,7 +69,7 @@ const HomeGamesSection = () => {
                     {game.name}
                   </div>
                 )}
-                <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md">
+                <div className="absolute top-1 left-1 bg-red-500 text-white text-[9.5px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md">
                   -{Math.round(((game.originalPrice - game.price) / game.originalPrice) * 100)}% OFF
                 </div>
                 <div className="absolute bottom-2 right-2 bg-white/95 backdrop-blur-sm px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow">
@@ -91,7 +91,7 @@ const HomeGamesSection = () => {
                 <div className="flex gap-2 mt-auto">
                   <button
                     onClick={(e) => handleBuyNow(e, game)}
-                    className="flex-1 bg-violet-500 hover:bg-violet-600 text-white font-semibold py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-[10px] sm:text-xs transition-all duration-200 cursor-pointer"
+                    className="flex-1 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-[10px] sm:text-xs transition-all duration-200 cursor-pointer"
                   >
                     Buy Now
                   </button>

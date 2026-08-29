@@ -82,8 +82,8 @@ const GiftCardSteam = () => {
               return (
                 <div key={voucher._id} onClick={() => navigate('/gift-card/steam/detail')} className="group relative bg-white rounded-2xl border border-slate-200/80 overflow-hidden hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-200/50 transition-all duration-300 flex flex-col cursor-pointer">
                   {discountPercent > 0 && (
-                    <div className="absolute top-3 left-3 z-10">
-                      <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-0.5 rounded-full text-[10px] font-semibold shadow-sm">-{discountPercent}% OFF</div>
+                    <div className="absolute top-1 left-1 z-10">
+                      <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9.5px] sm:text-xs font-bold shadow-sm">-{discountPercent}% OFF</div>
                     </div>
                   )}
 
@@ -126,7 +126,7 @@ const GiftCardSteam = () => {
                         </div>
                       ) : (
                         <div className="flex flex-col gap-2">
-                          <button onClick={(e) => { e.stopPropagation(); handleBuyNow(voucher) }} className="w-full bg-violet-500 hover:bg-violet-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer text-xs sm:text-sm">Buy Now</button>
+                          <button onClick={(e) => { e.stopPropagation(); handleBuyNow(voucher) }} className="w-full bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer text-xs sm:text-sm">Buy Now</button>
                           <button onClick={(e) => { e.stopPropagation(); handleAddToCart(voucher) }} className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer text-xs sm:text-sm">Add to Cart</button>
                         </div>
                       )}

@@ -105,7 +105,7 @@ const GamesPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-24 py-3 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500 text-sm outline-none transition-all bg-white"
             />
-            <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-violet-500 hover:bg-violet-600 text-white font-semibold px-4 py-1.5 rounded-lg transition-colors text-sm shadow-sm flex items-center gap-1">
+            <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold px-4 py-1.5 rounded-lg transition-colors text-sm shadow-sm flex items-center gap-1">
               Search
             </button>
           </div>
@@ -154,7 +154,7 @@ const GamesPage = () => {
                       {game.name}
                     </div>
                   )}
-                  <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] sm:text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md">
+                  <div className="absolute top-1 left-1 bg-red-500 text-white text-[9.5px] sm:text-xs font-bold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-md">
                     -{Math.round(((game.originalPrice - game.price) / game.originalPrice) * 100)}% OFF
                   </div>
                   {!game.isBundle && (
@@ -180,7 +180,7 @@ const GamesPage = () => {
                   <div className="flex gap-2 mt-auto">
                     <button
                       onClick={(e) => handleBuyNow(e, game)}
-                      className="flex-1 bg-violet-500 hover:bg-violet-600 text-white font-semibold py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-[10px] sm:text-xs transition-all duration-200 cursor-pointer"
+                      className="flex-1 bg-amber-400 hover:bg-amber-500 text-gray-900 font-semibold py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-[10px] sm:text-xs transition-all duration-200 cursor-pointer"
                     >
                       Buy Now
                     </button>
