@@ -157,6 +157,11 @@ const UserSelling = () => {
     }
   }
 
+  const [brandFilter, setBrandFilter] = useState('all')
+
+  // Available unique brands present in user listings
+  const availableBrands = Array.from(new Set(userListings.map(c => c.brand).filter(Boolean))).sort()
+
   const filteredUserListings = userListings.filter(c => {
     let matchesStatus = true
     if (statusFilter === 'approved') {
@@ -168,10 +173,17 @@ const UserSelling = () => {
     } else if (statusFilter !== 'all') {
       matchesStatus = c.status === statusFilter
     }
-    return matchesStatus &&
-      ((c.brand || '').toLowerCase().includes(search.toLowerCase()) ||
+
+    const matchesBrand = brandFilter === 'all' || c.brand === brandFilter
+
+    const matchesSearch = !search || (
+      (c.brand || '').toLowerCase().includes(search.toLowerCase()) ||
       (c.code || '').toLowerCase().includes(search.toLowerCase()) ||
-      (c.user?.fullName || '').toLowerCase().includes(search.toLowerCase()))
+      (c.user?.fullName || '').toLowerCase().includes(search.toLowerCase()) ||
+      (c.user?.email || '').toLowerCase().includes(search.toLowerCase())
+    )
+
+    return matchesStatus && matchesBrand && matchesSearch
   })
 
   // Calculations for Approval/Edit Modal
@@ -188,18 +200,50 @@ const UserSelling = () => {
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-4 bg-gray-50 border-b">
-          <div className="flex justify-between items-center gap-4">
-            <h2 className="text-lg font-bold text-gray-800">
+        <div className="p-4 bg-gray-50 border-b space-y-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
               User-Submitted Selling List
-              {!loading && <span className="ml-2 text-sm font-normal text-gray-500">({userListings.length} total)</span>}
+              {!loading && (
+                <span className="text-sm font-normal text-gray-500">
+                  ({filteredUserListings.length} / {userListings.length} total)
+                </span>
+              )}
             </h2>
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search codes, brands..." className="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+              {/* Brand Filter Dropdown */}
+              <div className="relative min-w-[170px]">
+                <select
+                  value={brandFilter}
+                  onChange={e => setBrandFilter(e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm font-medium border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 text-gray-700 cursor-pointer shadow-xs"
+                >
+                  <option value="all">All Brands ({userListings.length})</option>
+                  {availableBrands.map(b => (
+                    <option key={b} value={b}>
+                      {b} ({userListings.filter(c => c.brand === b).length})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Search input */}
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search codes, brands, user..."
+                  className="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-3">
+
+          {/* Status Filter Pills */}
+          <div className="flex items-center gap-2 flex-wrap pt-1">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mr-1">Status:</span>
             {[
               { key: 'all', label: 'All' },
               { key: 'pending', label: 'Pending' },
@@ -212,9 +256,9 @@ const UserSelling = () => {
               <button
                 key={f.key}
                 onClick={() => setStatusFilter(f.key)}
-                className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition-colors ${
+                className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-lg border transition-colors ${
                   statusFilter === f.key
-                    ? 'bg-blue-500 text-white border-blue-500'
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-xs font-semibold'
                     : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
                 }`}
               >
@@ -222,6 +266,36 @@ const UserSelling = () => {
               </button>
             ))}
           </div>
+
+          {/* Brand Filter Pills */}
+          {availableBrands.length > 0 && (
+            <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-gray-200">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider mr-1">Brand:</span>
+              <button
+                onClick={() => setBrandFilter('all')}
+                className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-all ${
+                  brandFilter === 'all'
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs font-bold'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                All Brands
+              </button>
+              {availableBrands.map(b => (
+                <button
+                  key={b}
+                  onClick={() => setBrandFilter(b === brandFilter ? 'all' : b)}
+                  className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-all ${
+                    brandFilter === b
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs font-bold'
+                      : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  {b}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {loading ? (
