@@ -198,11 +198,31 @@ const GiftCards = () => {
     }
   }
 
+  const handleDeleteVariant = async (productId, price) => {
+    if (!window.confirm(`Are you sure you want to permanently delete variant "${selectedBrand} — ₹${price}"? This action cannot be undone.`)) return
+    try {
+      await axios.delete(`${BACKEND_URL}/api/products/${productId}`, { withCredentials: true })
+      toast.success('Variant permanently deleted')
+      fetchData()
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete variant')
+    }
+  }
+
   // ---- Derived data ----
   const brandProducts = products
     .filter(p => p.brand === selectedBrand)
     .filter(p => showInactive ? true : p.isActive)
-    .sort((a, b) => (a.originalPrice || a.price) - (b.originalPrice || b.price))
+    .sort((a, b) => {
+      // 1. Show active variants on top, inactive on bottom
+      if (a.isActive !== b.isActive) {
+        return a.isActive ? -1 : 1
+      }
+      // 2. Sort by price from cheap (cheaper on top) to expensive (expensive on bottom)
+      const valA = a.originalPrice || a.price || 0
+      const valB = b.originalPrice || b.price || 0
+      return valA - valB
+    })
 
   // ---- Render ----
   const renderManage = () => (
@@ -358,7 +378,10 @@ const GiftCards = () => {
                               <button onClick={() => handleSaveVariant(p._id)} className="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded"><Save className="w-4 h-4" /></button>
                             </>
                           ) : (
-                            <button onClick={() => handleEditClick(p)} className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded"><Settings className="w-4 h-4" /></button>
+                            <>
+                              <button onClick={() => handleEditClick(p)} className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded" title="Edit Variant"><Settings className="w-4 h-4" /></button>
+                              <button onClick={() => handleDeleteVariant(p._id, p.originalPrice || p.price)} className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete Variant Permanently"><Trash2 className="w-4 h-4" /></button>
+                            </>
                           )}
                         </div>
                       </div>
