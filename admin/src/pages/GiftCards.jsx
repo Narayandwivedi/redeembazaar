@@ -7,7 +7,7 @@ import {
   Key, Calendar
 } from 'lucide-react'
 
-const brandsList = ['Google Play', 'Amazon', 'Flipkart', 'Steam', 'Myntra', 'BigBasket']
+const brandsList = ['Google Play', 'Amazon Pay Gift Card', 'Amazon Shopping Voucher', 'Reliance JioMart Gift Card', 'Flipkart', 'Steam', 'Myntra', 'BigBasket']
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
 
 const GiftCards = () => {

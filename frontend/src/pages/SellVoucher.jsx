@@ -8,7 +8,9 @@ import { useSEO } from '../hooks/useSEO'
 
 const brands = [
   'Google Play',
-  'Amazon',
+  'Amazon Pay Gift Card',
+  'Amazon Shopping Voucher',
+  'Reliance JioMart Gift Card',
   'Flipkart',
   'Steam',
   'Myntra',
@@ -338,7 +340,7 @@ const SellVoucher = () => {
               </div>
 
               {form.balance > 0 && (() => {
-                const firstTimerBrands = ['Amazon', 'Flipkart'];
+                const firstTimerBrands = ['Amazon', 'Amazon Pay Gift Card', 'Amazon Shopping Voucher', 'Flipkart'];
                 const isFirstTimer =
                   firstTimerBrands.includes(form.brand) &&
                   cards.filter(c => c.brand === form.brand).length === 0;

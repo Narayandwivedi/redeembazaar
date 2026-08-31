@@ -2,7 +2,7 @@ const GiftCardListing = require('../models/GiftCardListing');
 
 // Brands where first-time listers get a promotional 10% commission.
 // All other brands (including Google Play) always use 30%.
-const FIRST_TIMER_BRANDS = ['Amazon', 'Flipkart'];
+const FIRST_TIMER_BRANDS = ['Amazon', 'Amazon Pay Gift Card', 'Amazon Shopping Voucher', 'Flipkart'];
 
 const getCommissionRate = async (userId, brand) => {
   if (!FIRST_TIMER_BRANDS.includes(brand)) {
