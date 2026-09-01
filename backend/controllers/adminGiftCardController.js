@@ -35,6 +35,23 @@ const addListing = async (req, res) => {
       });
     }
 
+    if (brand === 'Flipkart') {
+      const cleanCode = (code || '').trim().replace(/\s+/g, '');
+      if (!/^\d{16}$/.test(cleanCode)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Flipkart gift card code must be exactly 16 numeric digits (e.g. 6000170522107804)'
+        });
+      }
+      const cleanPin = (pin || '').trim().replace(/\s+/g, '');
+      if (!cleanPin || !/^\d{6}$/.test(cleanPin)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Flipkart PIN is mandatory and must be exactly 6 numeric digits'
+        });
+      }
+    }
+
     const listing = new GiftCardListing({ 
       user: req.user._id, 
       brand, 

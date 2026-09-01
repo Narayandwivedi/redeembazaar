@@ -89,6 +89,17 @@ const GiftCards = () => {
     const form = addCodeForm[productId]
     if (!form?.code || !form?.expiry) return toast.error('Code and expiry are required')
 
+    if (product?.brand === 'Flipkart') {
+      const cleanCode = (form.code || '').trim().replace(/\s+/g, '')
+      if (!/^\d{16}$/.test(cleanCode)) {
+        return toast.error('Flipkart code must be exactly 16 numeric digits (e.g. 6000170522107804)')
+      }
+      const cleanPin = (form.pin || '').trim().replace(/\s+/g, '')
+      if (!cleanPin || !/^\d{6}$/.test(cleanPin)) {
+        return toast.error('Flipkart PIN is mandatory and must be exactly 6 numeric digits')
+      }
+    }
+
     try {
       const payload = {
         brand: product.brand,
@@ -480,68 +491,86 @@ const GiftCards = () => {
       {renderManage()}
 
       {/* Add Code Modal */}
-      {showAddCodeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                <Key className="w-4 h-4 text-indigo-600" />
-                Add Redeem Code
-              </h3>
-              <button onClick={() => setShowAddCodeModal(null)} className="text-gray-400 hover:text-gray-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Code *</label>
-                <input
-                  type="text"
-                  value={addCodeForm[showAddCodeModal]?.code || ''}
-                  onChange={e => setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], code: e.target.value } }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono"
-                  placeholder="XXXX-XXXX-XXXX-XXXX"
-                />
+      {showAddCodeModal && (() => {
+        const modalProduct = products.find(p => p._id === showAddCodeModal)
+        const isFlipkart = modalProduct?.brand === 'Flipkart'
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
+              <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 className="font-bold text-gray-800 flex items-center gap-2">
+                  <Key className="w-4 h-4 text-indigo-600" />
+                  Add Redeem Code {isFlipkart && '(Flipkart Rules Active)'}
+                </h3>
+                <button onClick={() => setShowAddCodeModal(null)} className="text-gray-400 hover:text-gray-600">
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">PIN (optional)</label>
-                <input
-                  type="text"
-                  value={addCodeForm[showAddCodeModal]?.pin || ''}
-                  onChange={e => setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], pin: e.target.value } }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono"
-                  placeholder="1234"
-                />
+              <div className="p-5 space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Code * {isFlipkart && <span className="text-indigo-600 text-xs font-bold">(Exactly 16 digits)</span>}
+                  </label>
+                  <input
+                    type="text"
+                    value={addCodeForm[showAddCodeModal]?.code || ''}
+                    onChange={e => {
+                      const val = isFlipkart ? e.target.value.replace(/\D/g, '') : e.target.value
+                      setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], code: val } }))
+                    }}
+                    maxLength={isFlipkart ? 16 : 50}
+                    inputMode={isFlipkart ? 'numeric' : 'text'}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono"
+                    placeholder={isFlipkart ? '6000170522107804 (16 digits)' : 'XXXX-XXXX-XXXX-XXXX'}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    PIN {isFlipkart ? <span className="text-red-500 text-xs font-bold">* (Mandatory 6 digits)</span> : '(optional)'}
+                  </label>
+                  <input
+                    type="text"
+                    value={addCodeForm[showAddCodeModal]?.pin || ''}
+                    onChange={e => {
+                      const val = isFlipkart ? e.target.value.replace(/\D/g, '') : e.target.value
+                      setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], pin: val } }))
+                    }}
+                    maxLength={isFlipkart ? 6 : 20}
+                    inputMode={isFlipkart ? 'numeric' : 'text'}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 font-mono"
+                    placeholder={isFlipkart ? '123456 (6 digits)' : '1234'}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1">
+                    <Calendar className="w-4 h-4" /> Expiry *
+                  </label>
+                  <input
+                    type="date"
+                    value={addCodeForm[showAddCodeModal]?.expiry || ''}
+                    onChange={e => setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], expiry: e.target.value } }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1 flex items-center gap-1">
-                  <Calendar className="w-4 h-4" /> Expiry *
-                </label>
-                <input
-                  type="date"
-                  value={addCodeForm[showAddCodeModal]?.expiry || ''}
-                  onChange={e => setAddCodeForm(prev => ({ ...prev, [showAddCodeModal]: { ...prev[showAddCodeModal], expiry: e.target.value } }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                />
+              <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+                <button
+                  onClick={() => setShowAddCodeModal(null)}
+                  className="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddCode}
+                  className="px-4 py-2 text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors"
+                >
+                  Save Code
+                </button>
               </div>
-            </div>
-            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-              <button
-                onClick={() => setShowAddCodeModal(null)}
-                className="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddCode}
-                className="px-4 py-2 text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 rounded-lg transition-colors"
-              >
-                Save Code
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

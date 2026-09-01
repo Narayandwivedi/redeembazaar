@@ -142,7 +142,11 @@ const SellVoucher = () => {
   }, [BACKEND_URL])
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    let { name, value } = e.target
+    if (form.brand === 'Flipkart' && (name === 'code' || name === 'pin')) {
+      value = value.replace(/\D/g, '')
+    }
+    setForm({ ...form, [name]: value })
   }
 
   const handleAdd = async () => {
@@ -155,6 +159,20 @@ const SellVoucher = () => {
       toast.error('Please fill all fields')
       return
     }
+
+    if (form.brand === 'Flipkart') {
+      const cleanCode = (form.code || '').trim().replace(/\s+/g, '')
+      if (!/^\d{16}$/.test(cleanCode)) {
+        toast.error('Flipkart card code must be exactly 16 numeric digits (e.g. 6000170522107804)')
+        return
+      }
+      const cleanPin = (form.pin || '').trim().replace(/\s+/g, '')
+      if (!cleanPin || !/^\d{6}$/.test(cleanPin)) {
+        toast.error('Flipkart PIN is mandatory and must be exactly 6 numeric digits')
+        return
+      }
+    }
+
     setLoading(true)
     try {
       const res = await axios.post(`${BACKEND_URL}/api/gift-cards`, form, { withCredentials: true })
@@ -193,8 +211,8 @@ const SellVoucher = () => {
                 <div className="bg-gray-900 text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center mb-1.5 sm:mb-2 shadow-md relative z-10">
                   <Upload className="h-3 w-3 sm:h-5 sm:w-5" />
                 </div>
-                <p className="font-medium text-gray-900 text-[10px] sm:text-sm leading-tight">Add Your Card</p>
-                <p className="text-[9px] sm:text-xs text-gray-500 mt-0.5 hidden sm:block">List your gift card for sale</p>
+                <p className="font-medium text-gray-900 text-[10px] sm:text-sm leading-tight">List Voucher</p>
+                <p className="text-[9px] sm:text-xs text-gray-500 mt-0.5 hidden sm:block">Fill card info & code</p>
                 <div className="absolute top-4 sm:top-5 left-[55%] w-[80%] h-0.5 border-t-[1.5px] sm:border-t-2 border-dashed border-gray-300 z-0" />
               </div>
               <div className="flex-1 flex flex-col items-center text-center relative">
@@ -262,7 +280,9 @@ const SellVoucher = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1.5">Gift Card Code</label>
+                <label className="block text-sm font-medium text-gray-800 mb-1.5">
+                  Gift Card Code {form.brand === 'Flipkart' && <span className="text-violet-600 font-semibold">(16-digit numbers only)</span>}
+                </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Hash className="h-4 w-4 text-violet-700" />
@@ -272,8 +292,10 @@ const SellVoucher = () => {
                     name="code"
                     value={form.code}
                     onChange={handleChange}
-                    placeholder="Enter gift card code"
-                    className="w-full pl-10 border border-violet-300 bg-white/80 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 shadow-sm transition-shadow"
+                    maxLength={form.brand === 'Flipkart' ? 16 : 50}
+                    inputMode={form.brand === 'Flipkart' ? 'numeric' : 'text'}
+                    placeholder={form.brand === 'Flipkart' ? 'e.g. 6000170522107804 (16 digits)' : 'Enter gift card code'}
+                    className="w-full pl-10 border border-violet-300 bg-white/80 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 shadow-sm transition-shadow font-mono"
                   />
                 </div>
               </div>
@@ -281,7 +303,7 @@ const SellVoucher = () => {
               {form.brand !== 'Google Play' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-800 mb-1.5">
-                    PIN <span className="text-gray-400 font-normal">(optional)</span>
+                    PIN {form.brand === 'Flipkart' ? <span className="text-red-500 font-bold">* (Mandatory 6-digit PIN)</span> : <span className="text-gray-400 font-normal">(optional)</span>}
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -292,8 +314,10 @@ const SellVoucher = () => {
                       name="pin"
                       value={form.pin}
                       onChange={handleChange}
-                      placeholder="Enter PIN if required"
-                      className="w-full pl-10 border border-violet-300 bg-white/80 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 shadow-sm transition-shadow"
+                      maxLength={form.brand === 'Flipkart' ? 6 : 20}
+                      inputMode={form.brand === 'Flipkart' ? 'numeric' : 'text'}
+                      placeholder={form.brand === 'Flipkart' ? 'Enter 6-digit PIN (e.g. 123456)' : 'Enter PIN if required'}
+                      className="w-full pl-10 border border-violet-300 bg-white/80 rounded-lg px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 shadow-sm transition-shadow font-mono"
                     />
                   </div>
                 </div>
